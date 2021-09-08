@@ -1,15 +1,20 @@
 package com.openclassrooms.testing;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.withinPercentage;
 
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,7 +49,7 @@ class CalculatorTest {
 		int sum=calculatorUnderTest.add(a,b);
 		
 		// ASSERT
-		assertEquals(5,sum);
+		assertThat(sum).isEqualTo(5);
 	}
 
 	@Test
@@ -57,7 +62,7 @@ class CalculatorTest {
 		int product = calculatorUnderTest.mult(a,b);
 		
 		// ASSERT
-		assertEquals(product, 6);
+		assertThat(product).isEqualTo(6);
 	}
 	
 	// mesurer le temps de traitement de l'ensemble des tests
@@ -84,7 +89,7 @@ class CalculatorTest {
 		int actualResult=calculatorUnderTest.mult(arg,0);
 		
 		// Assert -ça vaut toujour zéro !
-		assertEquals(0,actualResult);
+		assertThat(actualResult).isEqualTo(0);
 	}
 	
 	// insérer plusieurs parametre pour chaque test 
@@ -97,11 +102,11 @@ class CalculatorTest {
 		int actualResult = calculatorUnderTest.add(arg1, arg2);
 
 		// Assert
-		assertEquals(expectResult, actualResult);
-	}
+		assertThat(actualResult).isEqualTo(expectResult);
+		}
 	
 	// tester qu'un traitement ne dois pas être trop lent
-	@Timeout(1)
+	@Timeout(3)
 	@Test
 	public void longCalcul_shouldComputeInLessThan1Second() {
 		// Arrange
@@ -111,5 +116,40 @@ class CalculatorTest {
 		
 		// Assert
 		// ...
+	}
+	
+	@Test
+	public void listDigits_shouldReturnsTheListOfDigits_OfPositiveInteger() {
+		//GIVEN
+		final int number=95897;
+		
+		//WHEN
+		final Set<Integer> actualDigits= calculatorUnderTest.digitsSet(number);
+		
+		// THEN
+		assertThat(actualDigits).containsExactlyInAnyOrder(9,5,8,7);
+	}
+	@Test
+	public void listDigits_shouldReturnsTheListOfDigits_OfNegativeInteger() {
+		//GIVEN
+		final int number=-95897;
+		
+		//WHEN
+		final Set<Integer> actualDigits= calculatorUnderTest.digitsSet(number);
+		
+		// THEN
+		assertThat(actualDigits).containsExactlyInAnyOrder(9,5,8,7);
+	}
+	
+	@Test
+	public void listDigits_shouldReturnsTheListOfZero_OfZero() {
+		//GIVEN
+		final int number=0;
+		
+		//WHEN
+		final Set<Integer> actualDigits= calculatorUnderTest.digitsSet(number);
+		
+		// THEN
+		assertThat(actualDigits).containsExactly(0);
 	}
 }
