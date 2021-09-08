@@ -1,41 +1,46 @@
 package com.openclassrooms.testing;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.withinPercentage;
 
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Set;
 
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+@ExtendWith(LoggingExtension.class)
 class CalculatorTest {
 
 	private Calculator calculatorUnderTest;
 	private static Instant startedAt;
 	
+	private Logger logger;
+
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
+	
 	// avant chaque test initialisé une instance du calculateur
 	@BeforeEach
 	public void initCalculator() {
-		System.out.println("Avant chaque test on instancie le calculator");
+		logger.info("Avant chaque test on instancie le calculator");
 		calculatorUnderTest =new Calculator();
 	}
 	// après chaque test mettre le calculateur à null
 	@AfterEach
 	public void undefCalculator() {
-		System.out.println("Aprés chaque test on remet le calculateur en test à null");
+		logger.info("Aprés chaque test on remet le calculateur en test à null");
 		calculatorUnderTest =null;
 	}
 	@Test
